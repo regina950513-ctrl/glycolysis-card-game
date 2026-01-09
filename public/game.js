@@ -1,100 +1,99 @@
-const playerHand = document.getElementById("player-hand");
-const status = document.getElementById("status");
-const playerATPText = document.getElementById("player-atp");
-const aiATPText = document.getElementById("ai-atp");
+// ===== Basic Glycolysis Card Game (Playable Demo Version) =====
 
+// Game State
 let playerATP = 2;
 let aiATP = 2;
+let currentStep = 0;
+let currentTurn = "player";
 
-// Glycolysis pathway steps
+// Simplified glycolysis steps
 const pathway = [
-  "Glucose",
-  "G6P",
-  "F6P",
-  "F1,6BP",
-  "Pyruvate"
+  "Hexokinase",
+  "Phosphoglucose Isomerase",
+  "PFK-1",
+  "Aldolase",
+  "Pyruvate Kinase"
 ];
 
-let currentStepIndex = 0;
-let isPlayerTurn = true;
-
-// Card definitions (依 PDF 概念：酵素只能在特定步驟用)
-const cards = [
-  {
-    name: "Hexokinase",
-    from: "Glucose",
-    to: "G6P",
-    atpChange: -1
-  },
-  {
-    name: "PFK-1",
-    from: "F6P",
-    to: "F1,6BP",
-    atpChange: -1
-  },
-  {
-    name: "Pyruvate Kinase",
-    from: "F1,6BP",
-    to: "Pyruvate",
-    atpChange: +2
-  }
+// Player starting hand
+let playerHand = [
+  { name: "Hexokinase", cost: 1 },
+  { name: "Phosphoglucose Isomerase", cost: 0 },
+  { name: "PFK-1", cost: 1 },
+  { name: "Aldolase", cost: 0 },
+  { name: "Pyruvate Kinase", gain: 2 }
 ];
 
+// DOM elements
+const playerATPText = document.getElementById("player-atp");
+const aiATPText = document.getElementById("ai-atp");
+const pathwayText = document.getElementById("pathway");
+const handDiv = document.getElementById("player-hand");
+const statusText = document.getElementById("status");
+
+// Initial render
+renderAll();
+
+function renderAll() {
+  playerATPText.textContent = playerATP;
+  aiATPText.textContent = aiATP;
+  pathwayText.textContent = `Current step: ${pathway[currentStep]}`;
+  statusText.textContent = `Turn: ${currentTurn}`;
+  renderHand();
+}
+
+// Render player hand
 function renderHand() {
-  playerHand.innerHTML = "";
-  cards.forEach(card => {
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML = `<strong>${card.name}</strong><br/>
-      <small>${card.from} → ${card.to}</small>`;
-    div.onclick = () => playPlayerCard(card);
-    playerHand.appendChild(div);
+  handDiv.innerHTML = "";
+  playerHand.forEach((card, index) => {
+    const cardDiv = document.createElement("div");
+    cardDiv.className = "card";
+    cardDiv.textContent = card.name;
+    cardDiv.onclick = () => playCard(index);
+    handDiv.appendChild(cardDiv);
   });
 }
 
-function updateStatus(text) {
-  status.innerText = text;
-  playerATPText.innerText = playerATP;
-  aiATPText.innerText = aiATP;
-}
+// Play card
+function playCard(index) {
+  if (currentTurn !== "player") return alert("Not your turn!");
 
-function currentStep() {
-  return pathway[currentStepIndex];
-}
+  const card = playerHand[index];
 
-function canPlay(card, atp) {
-  return card.from === currentStep() && atp + card.atpChange >= 0;
-}
-
-function advanceStep(card) {
-  if (pathway[currentStepIndex + 1] === card.to) {
-    currentStepIndex++;
-  }
-}
-
-function playPlayerCard(card) {
-  if (!isPlayerTurn) return;
-
-  if (!canPlay(card, playerATP)) {
-    updateStatus("❌ Card cannot be played at this step");
+  if (card.name !== pathway[currentStep]) {
+    alert("Wrong step in glycolysis!");
     return;
   }
 
-  playerATP += card.atpChange;
-  advanceStep(card);
+  if (card.cost && playerATP < card.cost) {
+    alert("Not enough ATP!");
+    return;
+  }
 
-  updateStatus(`You played ${card.name}`);
-  isPlayerTurn = false;
+  // Apply effects
+  if (card.cost) playerATP -= card.cost;
+  if (card.gain) playerATP += card.gain;
+
+  // Advance pathway
+  currentStep++;
+  playerHand.splice(index, 1);
+
+  if (currentStep >= pathway.length) {
+    alert("Glycolysis complete! 🎉");
+    currentStep = 0;
+  }
+
+  currentTurn = "ai";
+  renderAll();
 
   setTimeout(aiTurn, 1000);
 }
 
+// Simple AI turn
 function aiTurn() {
-  const validCards = cards.filter(card =>
-    canPlay(card, aiATP)
-  );
-
-  if (validCards.length === 0) {
-    updateStatus("AI cannot play, your turn");
+  aiATP += 1; // simple gain
+  currentTurn = "player";
+  renderAll();
+}
 
 
