@@ -1,3 +1,5 @@
+console.log("GAME JS UPDATED");
+
 // ===== Basic Glycolysis Card Game (Playable Demo Version) =====
 
 // Game State
@@ -95,5 +97,6 @@ function aiTurn() {
   currentTurn = "player";
   renderAll();
 }
+
 
 
