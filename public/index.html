@@ -1,17 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
   <title>Glycolysis Card Game</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <h1>🧬 Glycolysis Card Game</h1>
-  <p>Server is running 🎉</p>
 
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
-    console.log("Connected to server");
-  </script>
+  <div id="status">Your Turn</div>
+
+  <div class="board">
+    <div class="player-area">
+      <h2>👤 Player</h2>
+      <div>ATP: <span id="player-atp">2</span></div>
+      <div id="player-hand" class="hand"></div>
+    </div>
+
+    <div class="center">
+      <h2>Glycolysis Pathway</h2>
+      <div id="pathway">Glucose → G6P → F6P → F1,6BP → Pyruvate</div>
+    </div>
+
+    <div class="player-area">
+      <h2>🤖 Opponent</h2>
+      <div>ATP: <span id="ai-atp">2</span></div>
+      <div class="hand back">🂠 🂠 🂠</div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
 </body>
 </html>
+
