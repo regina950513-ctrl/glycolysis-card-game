@@ -7,6 +7,9 @@ let aiATP = 2;
 let currentStep = 0;
 let currentTurn = "player";
 
+let players = [];
+let currentPlayerIndex = 0;
+
 // Simplified glycolysis steps
 const pathway = [
   "Hexokinase",
@@ -96,5 +99,37 @@ function aiTurn() {
   currentTurn = "player";
   renderAll();
 }
+function startGame(playerCount) {
+  // 隱藏選人畫面，顯示遊戲畫面
+  document.getElementById("player-select-screen").style.display = "none";
+  document.getElementById("game-screen").style.display = "block";
+
+  players = [];
+
+  // 建立玩家
+  for (let i = 0; i < playerCount; i++) {
+    players.push({
+      name: `Player ${i + 1}`,
+      isAI: false,
+      hand: []
+    });
+  }
+
+  // AI 補位到 4 人
+  for (let i = playerCount; i < 4; i++) {
+    players.push({
+      name: `AI ${i + 1}`,
+      isAI: true,
+      hand: []
+    });
+  }
+
+  currentPlayerIndex = 0;
+
+  console.log("Players:", players);
+
+  // 之後會在這裡發牌、開始第一回合
+}
+
 
 
