@@ -8,9 +8,14 @@
 <body>
 
   <!-- Player Selection Screen -->
-  <div id="player-select-screen">
-    ...
-  </div>
+<div id="player-select-screen">
+  <h2>選擇玩家人數</h2>
+
+  <button onclick="startGame(1)">1 人（含 AI）</button>
+  <button onclick="startGame(2)">2 人</button>
+  <button onclick="startGame(3)">3 人</button>
+  <button onclick="startGame(4)">4 人</button>
+</div>
 
   <!-- Game Screen -->
   <div id="game-screen" style="display:none;">
@@ -51,9 +56,11 @@
     </div>
   </div>
 
-  <script src="game.js"></script>
+ <script src="game.js"></script>
+
 </body>
 </html>
+
 
 
 
