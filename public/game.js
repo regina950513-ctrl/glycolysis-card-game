@@ -3,7 +3,6 @@ console.log("GAME JS UPDATED");
 
 // Game State
 let playerATP = 2;
-let aiATP = 2;
 let currentStep = 0;
 let currentTurn = "player";
 
@@ -130,6 +129,7 @@ function startGame(playerCount) {
 
   // 之後會在這裡發牌、開始第一回合
 }
+
 
 
 
